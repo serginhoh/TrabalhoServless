@@ -1,0 +1,122 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    trabalhoservless
+
+    Rest API
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+        Environment:
+          Variables:
+            TABLE_NAME: !Ref TripTable
+            ENDPOINT_OVERRIDE: ""
+
+Resources:
+
+  CreateTripFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trabalhoservless-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.servless.handler.CreateTrip::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable
+     Events:
+       CreateTrip:
+         Type: Api
+         Properties:
+           Path: /trips
+           Method: post
+
+  GetTripsByPeriodFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trabalhoservless-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.servless.handler.GetTripsByPeriod::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable     
+     Events:
+       GetTripsByPeriod:
+         Type: Api
+         Properties:
+           Path: /trips/findbyperiod/
+           Method: get
+           RequestParameters:
+              - method.request.querystring.starts
+              - method.request.querystring.ends
+
+  GetTripsByCountryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trabalhoservless-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.servless.handler.GetTripsByCountry::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable     
+     Events:
+       GetTripsByPeriod:
+         Type: Api
+         Properties:
+           Path: /trips/{country}/
+           Method: get
+           RequestParameters:
+              
+  GetTripsByCityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/trabalhoservless-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.fiap.servless.handler.GetTripsByCity::handleRequest
+     Runtime: java8
+     Policies:
+       - DynamoDBCrudPolicy:
+           TableName: !Ref TripTable     
+     Events:
+       GetTripsByPeriod:
+         Type: Api
+         Properties:
+           Path: /trips/{country}/findbycity/
+           Method: get
+           RequestParameters:
+              - method.request.querystring.city
+
+TripTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: trip
+      AttributeDefinitions:
+        - AttributeName: country
+          AttributeType: S
+        - AttributeName: city
+          AttributeType: S
+      KeySchema:
+        - AttributeName: country
+          KeyType: HASH
+        - AttributeName: city
+          KeyType: RANGE
+      LocalSecondaryIndexes: 
+      BillingMode: PAY_PER_REQUEST              
+
+Outputs:
+
+    CreateTripFunction:
+      Description: "CreateTrip Lambda Function ARN"
+      Value: !GetAtt CreateTripFunction.Arn    
+
+    GetTripsByPeriodFunction:
+      Description: "GetTripsByPeriod Lambda Function ARN"
+      Value: !GetAtt GetTripsByPeriodFunction.Arn 
+
+    GetTripsByCountryFunction:
+      Description: "GetTripsByCountry Lambda Function ARN"
+      Value: !GetAtt GetTripsByCountryFunction.Arn
+
+    GetTripsByCityFunction:
+      Description: "GetTripsByCity Lambda Function ARN"
+      Value: !GetAtt GetTripsByCityFunction.Arn

@@ -1,0 +1,14 @@
+{
+	"CreateTripFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000"
+	},
+	"GetTripsByPeriodFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000"
+	},
+	"GetTripsByCountryFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000"
+	},
+	"GetTripsByCityFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000"
+	}
+}
