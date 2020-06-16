@@ -85,6 +85,11 @@ Resources:
             Method: get
             RequestParameters:
             - method.request.querystring.city
+  ServerlessRestApi:
+    Type: AWS::Serverless::Api
+    DeletionPolicy: Retain
+    Properties:
+      StageName: Prod
   TripTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -136,3 +141,7 @@ Outputs:
       Fn::GetAtt:
       - GetTripsByCityFunction
       - Arn
+  ProdDataEndpoint:
+    Description: API Gateway Endpoint
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
