@@ -26,11 +26,11 @@ mvn install
 **Utilização local do API Gateway / DynamoDB**
 1. Utilizaremos uma instância local do DynamoDB em um container Docker: 
 
-	`docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data` 
+	`docker run -d -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data` 
 
     - no Windows PowerShell:
 
-	`docker run -p 8000:8000 -v ${pwd}/local/dynmodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data` 
+	`docker run -d -p 8000:8000 -v ${pwd}/local/dynmodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data` 
 
 2. Criação da tabela no DynamoDB:
 
