@@ -23,7 +23,7 @@ public class GetTripsByPeriod implements RequestHandler<HandlerRequest, HandlerR
         List<Trip> result = this.tripRepository.findByPeriod(startDate, endDate);
 
         if (result == null || result.isEmpty()) {
-            result = new ArrayList<Trip>() {{ add(new Trip());}} ;
+            result = new ArrayList<Trip>();
         }
 
         return HandlerResponse.builder().setStatusCode(200).setObjectBody(result).build();
